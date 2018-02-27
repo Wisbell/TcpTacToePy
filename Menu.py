@@ -46,10 +46,12 @@ class Menu:
             self.main()
 
         elif choice == "4":
+            print("")
             print("Oh crap here comes your boss.  Closing in 3 seconds")
             time.sleep(3)
             self.clearScreen()
             # Figure out how to close the terminal later
+            
             # These do not work - only leave terminal in CWD with cleared screen
             # os.system("exit")
             # sys.exit(0)
