@@ -1,5 +1,5 @@
-from Menu import Menu
+from menu import Menu
 
-game = Menu()
+game = Menu.Menu()
 
 game.main()
