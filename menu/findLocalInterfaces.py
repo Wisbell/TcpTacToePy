@@ -1,7 +1,6 @@
 import sys
 import netifaces
 import winreg
-from pprint import pprint
 
 """
 Note: It maybe be possible to find the right interface without using winreg
@@ -16,7 +15,7 @@ using the appropiate AF variable
 """
 
 # Find out what OS user is running and return parsed Ethernet/Wi-Fi interfaces
-def findLocalInterfaces():
+def findLocalInterfaces(self):
     # Windows
     if sys.platform == "win32":
 
@@ -62,7 +61,4 @@ def findLocalInterfaces():
         # set up linux later - necessary for RPI testing
         print("Add linux functionality doofus")
 
-    pprint(parsedInterfaces)
     return parsedInterfaces
-
-findLocalInterfaces()

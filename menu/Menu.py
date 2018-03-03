@@ -2,6 +2,10 @@ import sys
 import os
 import time
 
+import netifaces
+import winreg
+from pprint import pprint
+
 from .utility import clearScreen
 
 class Menu:
@@ -10,13 +14,30 @@ class Menu:
     from .parseMainMenuChoice import parseMainMenuChoice
     from .showAboutScreen import showAboutScreen
     from .showCreateGameMenu import showCreateGameMenu
+    from .findLocalInterfaces import findLocalInterfaces
 
     def __init__(self):
         # Wipe screen clean on start
         clearScreen()
 
+    # def findLocalInterfaces(self):
+    #     # find out what OS user is running and return parsed interfaces
+    #     # Windows
+    #     if sys.platform == "win32":
+    #         interfaces = netifaces.interfaces()
+
+    #         reg = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
+            
+    #         reg_key = winreg.OpenKey(reg, r'SYSTEM\CurrentControlSet\Control\Network\{4d36e972-e325-11ce-bfc1-08002be10318}')
+            
+    #         pass
+    #     # Linux/OSX
+    #     elif sys.platform == "linux" or sys.platform == "darwin":
+    #         pass
+    #         # set up linux later - necessary for RPI
+
     def showCreateLanGame(self):
-        # Find out what OS user is running
+        interfaceList = self.findLocalInterfaces()
         # Get a list of interfaces and list them with number, interface name, ip address
         # tell user in message to choose from the list their local network ip
 
