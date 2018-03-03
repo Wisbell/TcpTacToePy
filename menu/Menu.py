@@ -7,6 +7,7 @@ import winreg
 from pprint import pprint
 
 from .utility import clearScreen
+from .utility import evenColumn
 
 class Menu:
 
@@ -15,41 +16,48 @@ class Menu:
     from .showAboutScreen import showAboutScreen
     from .showCreateGameMenu import showCreateGameMenu
     from .findLocalInterfaces import findLocalInterfaces
+    from .showCreateLanGameMenu import showCreateLanGameMenu
 
     def __init__(self):
         # Wipe screen clean on start
         clearScreen()
 
-    # def findLocalInterfaces(self):
-    #     # find out what OS user is running and return parsed interfaces
-    #     # Windows
-    #     if sys.platform == "win32":
-    #         interfaces = netifaces.interfaces()
+    # def showCreateLanGameMenu(self):
+    #     interfaceList = self.findLocalInterfaces()
 
-    #         reg = winreg.ConnectRegistry(None, winreg.HKEY_LOCAL_MACHINE)
-            
-    #         reg_key = winreg.OpenKey(reg, r'SYSTEM\CurrentControlSet\Control\Network\{4d36e972-e325-11ce-bfc1-08002be10318}')
-            
-    #         pass
-    #     # Linux/OSX
-    #     elif sys.platform == "linux" or sys.platform == "darwin":
-    #         pass
-    #         # set up linux later - necessary for RPI
+    #     if len(interfaceList) > 0:
+    #         print("Choose a local interface or manually enter an IP to start your server!")
+    #         printOptions = evenColumn(interfaceList)
+    #         for item in printOptions:
+    #             print(item)
+    #         print("or")
+    #         print(str(len(printOptions) + 1) + " - \t" + "Manually input IP address")
+    #         print("> ", end="") # end prevents auto new line
+    #         choice = input()
+    #         self.parseLanGameChoice(choice, printOptions)
 
-    def showCreateLanGame(self):
-        interfaceList = self.findLocalInterfaces()
-        # Get a list of interfaces and list them with number, interface name, ip address
-        # tell user in message to choose from the list their local network ip
+    #     else:
+    #         print("Couldn't find any interfaces.  Please manually enter your local IP address you want to host from.")
+    #         print("> ", end="") # end prevents auto new line
+    #         manualIp = input()
+    #         self.parseLanGameChoice(manualIp, None) # Pass None if no choices
 
-        # when user make a choice go to empty game and show starting of server in
+    def parseLanGameChoice(self, choice, interfaces):
+        print("choice", choice)
+        # print("interfaces", interfaces)
+
+        if interfaces == None:
+            pass # ip will be whatever the user entered
+        else:
+            print("interfaces", interfaces)
+            # get ip from interface list
+        
+
+          # when user make a choice go to empty game and show starting of server in
         # message box
 
         # start server
         # start client
-        pass
-
-    def parseLanGameChoice(self):
-        pass
 
     # Parse Create Game Choice
     def parseCreateGameChoice(self, choice):
@@ -78,10 +86,11 @@ class Menu:
         # LAN game
         elif choice == "2":
             clearScreen()
-            print("create lan game here")
-            print("returning to main menu")
-            time.sleep(2)
-            self.showMainMenu()
+            self.showCreateLanGameMenu()
+            # print("create lan game here")
+            # print("returning to main menu")
+            # time.sleep(2)
+            # self.showMainMenu()
 
         # Internet game
         elif choice == "3":
