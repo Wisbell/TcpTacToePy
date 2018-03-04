@@ -57,6 +57,7 @@ def findLocalInterfaces(self):
                 pass
 
     # Linux/OSX
+    # NOT DONE
     elif sys.platform == "linux" or sys.platform == "darwin":
         # set up linux later - necessary for RPI testing
         print("Add linux functionality doofus")
