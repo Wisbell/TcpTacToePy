@@ -2,16 +2,17 @@ import sys
 import os
 import time
 
-import netifaces
-import winreg
-from pprint import pprint
+from TicTacToe import TicTacToe
+
+# remove this if not needed here
+# import netifaces
+# import winreg
+# from pprint import pprint
 
 # remove these later if not needed
 from .utility import clearScreen
-from .utility import evenColumn
 
-from TicTacToe import TicTacToe
-
+# Menu Functionality
 class Menu:
 
     from .showMainMenu import showMainMenu
@@ -27,12 +28,14 @@ class Menu:
         # Wipe screen clean on start
         clearScreen()
 
+    # NOT DONE
     def startGame(self, ip, port):
         # import TTT and pass ip and port to the new instance to start
         # START GAME HERE
         print("ip", ip)
         print("port", port)
 
+    # NOT DONE
     def showGetManualIP(self):
         clearScreen()
         print("This feature is incomplete as of now - will return to LAN game menu.")
@@ -50,6 +53,7 @@ class Menu:
 
         pass
 
+    # NOT DONE
     # Parse Create Game Choice
     def parseCreateGameChoice(self, choice):
         if len(choice) > 1:

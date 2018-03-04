@@ -1,52 +1,87 @@
+from menu.utility import clearScreen
+from time import sleep
+
 class TicTacToe:
 
-    # gameSettings = {
-    #     "boardState": None,
-    #     "currentPlayer": None,
-    #     "firstPlayer": None,
-    #     "hostIP": None,
-    #     "port": None
-    # }
-
-    # add game args later
     def __init__(self, host, port):
         self.host = host
         self.port = port
-        self.boardState = None
-        self.firstPlayer = None
+        self.boardState = {
+                            "A1": " ",
+                            "B1": " ",
+                            "C1": " ",
+                            "A2": " ",
+                            "B2": " ",
+                            "C2": " ",
+                            "A3": " ",
+                            "B3": " ",
+                            "C3": " "
+                        }
+        self.firstPlayer = None # X or O goes first
         self.currentPlayer = None
-
-        # run setupGame function to setup game
-
-        # after that render the game
-        pass
+        self.gameFinished = False # Is the game done?
+        self.mostRecentMessages = [
+                                    ".",
+                                    ".",
+                                    ".",
+                                    ".",
+                                    ".",
+                                    ".",
+                                    ".",
+                                    ".",
+                                    ".",
+                                    "- Setting up Game -"
+                                ]
+        self.stateChange = False
+        self.setupGame()
     
-    # Empty space default to keep board format flush
-    boardState = {
-        "A1": " ",
-        "B1": " ",
-        "C1": " ",
-        "A2": " ",
-        "B2": " ",
-        "C2": " ",
-        "A3": " ",
-        "B3": " ",
-        "C3": " ",
-    }
-
-    # X or O
-    currentPlayer = ""
-    firstPlayer = ""
-
-    # Network Settings
-    hostIP = ""
-    port = None
-
     def setupGame(self):
-        pass
+        # Render initial view
+        self.renderAll()
 
-    def renderNetworkInfo(self):
-        pass
+        # Start searching for state changes
+        self.runGame()
+
+        # Start up Server
+            # tell message board server is starting
+
+        # Wait for other player connection to server 
+            # tell user on message board
+
+    # NOT DONE - ADD CLEAR MSG COMMAND, ADD QUIT COMMAND
+    def processMessages(self, message):
+
+        # add clear
+
+        # add quit
+ 
+        # Check if it starts with set
+        # If not set just add message to message board
+        if message.split(None, 1)[0] != "set":
+            self.mostRecentMessages.append(message)
+            self.mostRecentMessages.pop(0)
+
+        # Process set commands
+        elif message.split(None, 1)[0] == "set":
+
+            # All set commands should take at least 3 params
+            if len(message.split()) < 3:
+                self.mostRecentMessages.append("Please input valid set command")
+                self.mostRecentMessages.pop(0)
+
+            elif message.split()[1] == "board":
+                self.mostRecentMessages.append("setting board")
+                self.mostRecentMessages.pop(0)
+
+            else:
+                self.mostRecentMessages.append("Please input valid set command")
+                self.mostRecentMessages.pop(0)
+
+        self.stateChange = True # Update view
+
+    def renderServerInfo(self):
+        print("Host: " + self.host)
+        print("Port: " + str(self.port))
 
     def renderBoard(self, boardState):
         print("   A   B   C ")
@@ -56,28 +91,45 @@ class TicTacToe:
         print("  -----------")
         print("3  {} | {} | {}".format(boardState["A3"], boardState["B3"], boardState["C3"]))
 
+   # Get all recent messages and render
     def renderMessageBoard(self):
-        pass
+        print("Messages")
+        print("--------")
+
+        for message in self.mostRecentMessages:
+            print(message)
+
+    def renderInputField(self):
+        print("> ", end="")
+        message = input()
+        self.processMessages(message)
 
     def renderAll(self):
-        pass
+        clearScreen()
+        self.renderServerInfo()
+        print("")
+        self.renderBoard(self.boardState)
+        print("")
+        self.renderMessageBoard()
+        self.renderInputField()
 
-        # clear screen
-
-        # Render Network Settings
-
-        # Render Board
-
-        # Render Message Board
-
-    # needs board argument
-    def makePlay(self):
-        pass
+    def setBoardLetter(self, position):
+        self.boardState[position] = self.currentPlayer
 
     # change player each time a person take a turn
-    def setPlayer(self, letter):
-        self.currentPlayer = letter
+    def setCurrentPlayer(self):
+        if self.currentPlayer == "X":
+            self.currentPlayer = "O"
+        else:
+            self.currentPlayer = "X"
 
+    def runGame(self):
+
+        while self.gameFinished == False:
+            sleep(.1)
+            if self.stateChange == True:
+                self.stateChange = False
+                self.renderAll()
 
 # Notes
 # Add chat screen
