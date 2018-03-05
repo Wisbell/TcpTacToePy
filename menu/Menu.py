@@ -4,11 +4,6 @@ import time
 
 from TicTacToe import TicTacToe
 
-# remove this if not needed here
-# import netifaces
-# import winreg
-# from pprint import pprint
-
 # remove these later if not needed
 from .utility import clearScreen
 
@@ -28,12 +23,10 @@ class Menu:
         # Wipe screen clean on start
         clearScreen()
 
-    # NOT DONE
+    # Game begins here
     def startGame(self, ip, port):
-        # import TTT and pass ip and port to the new instance to start
-        # START GAME HERE
-        print("ip", ip)
-        print("port", port)
+        # Do I need to save the instance to a variable?
+        game = TicTacToe(ip, port)
 
     # NOT DONE
     def showGetManualIP(self):

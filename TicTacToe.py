@@ -17,10 +17,7 @@ class TicTacToe:
                             "B3": " ",
                             "C3": " "
                         }
-        self.firstPlayer = None # X or O goes first
-        self.currentPlayer = None
-        self.gameFinished = False # Is the game done?
-        self.mostRecentMessages = [
+        self.messageBoard = [
                                     ".",
                                     ".",
                                     ".",
@@ -30,19 +27,41 @@ class TicTacToe:
                                     ".",
                                     ".",
                                     ".",
-                                    "- Setting up Game -"
+                                    "."
                                 ]
-        self.stateChange = False
-        self.setupGame()
+        self.firstMove = None     # X or O
+        self.currentPlayer = None # X or O
+        self.gameFinished = False # Is the game done?
+        self.stateChange = False  # Has message 
+        self.gameReady = False
+        self.startGame()
+
+    def renderSetup(self):
+        # set x or o first
+        print("Do you want to be X or O?")
+        print("Letter: ",end="")
+        letter = input()
+        # let first player who started the game choose who goes first
+        print("Who goes first X or O?")
+        print("First: ", end="")
+        first = input()
     
-    def setupGame(self):
+        self.firstMove = first
+        self.currentPlayer = letter
+        self.gameReady = True
+
+        self.renderAll()
+
+    def startGame(self):
         # Render initial view
         self.renderAll()
 
         # Start searching for state changes
         self.runGame()
 
-        # Start up Server
+        if self.gameReady == True:
+            pass
+        # Start up Server - if game is set up
             # tell message board server is starting
 
         # Wait for other player connection to server 
@@ -50,32 +69,39 @@ class TicTacToe:
 
     # NOT DONE - ADD CLEAR MSG COMMAND, ADD QUIT COMMAND
     def processMessages(self, message):
+        
+        # Just spaces - do nothing
+        if len(message.split()) == 0:
+            pass
 
-        # add clear
+        # Clear
+        elif len(message.split()) == 1 and message.split()[0] == "clear":
+            self.messageBoard = []
 
-        # add quit
- 
-        # Check if it starts with set
-        # If not set just add message to message board
-        if message.split(None, 1)[0] != "set":
-            self.mostRecentMessages.append(message)
-            self.mostRecentMessages.pop(0)
+        # Quit
+        elif len(message.split()) == 1 and message.split()[0] == "quit":
+            pass
 
-        # Process set commands
+        # Set
         elif message.split(None, 1)[0] == "set":
 
             # All set commands should take at least 3 params
             if len(message.split()) < 3:
-                self.mostRecentMessages.append("Please input valid set command")
-                self.mostRecentMessages.pop(0)
+                self.messageBoard.append("Please input valid set command")
+                self.messageBoard.pop(0)
 
             elif message.split()[1] == "board":
-                self.mostRecentMessages.append("setting board")
-                self.mostRecentMessages.pop(0)
+                self.messageBoard.append("setting board")
+                self.messageBoard.pop(0)
 
             else:
-                self.mostRecentMessages.append("Please input valid set command")
-                self.mostRecentMessages.pop(0)
+                self.messageBoard.append("Please input valid set command")
+                self.messageBoard.pop(0)
+
+        else:
+            self.messageBoard.append(message)
+            if len(self.messageBoard) > 10:
+                self.messageBoard.pop(0)
 
         self.stateChange = True # Update view
 
@@ -96,7 +122,7 @@ class TicTacToe:
         print("Messages")
         print("--------")
 
-        for message in self.mostRecentMessages:
+        for message in self.messageBoard:
             print(message)
 
     def renderInputField(self):
@@ -110,13 +136,17 @@ class TicTacToe:
         print("")
         self.renderBoard(self.boardState)
         print("")
-        self.renderMessageBoard()
-        self.renderInputField()
+
+        if self.gameReady == False:
+            self.renderSetup()
+        else:
+            self.renderMessageBoard()
+            self.renderInputField()
 
     def setBoardLetter(self, position):
         self.boardState[position] = self.currentPlayer
 
-    # change player each time a person take a turn
+    # Change player each time a person take a turn
     def setCurrentPlayer(self):
         if self.currentPlayer == "X":
             self.currentPlayer = "O"
@@ -132,7 +162,6 @@ class TicTacToe:
                 self.renderAll()
 
 # Notes
-# Add chat screen
-#   input field can take in msg arg to make a msg liek '/m ' - 'quit' to quit - 'A1' to make play
+
 # Add quit functionality
 #  type in quit and it takes you to home screen
