@@ -1,11 +1,13 @@
 from menu.utility import clearScreen
 from time import sleep
+import sys
 
 class TicTacToe:
 
-    def __init__(self, host, port):
-        self.host = host
-        self.port = port
+    # def __init__(self, host, port):
+    def __init__(self):
+        # self.host = host
+        # self.port = port
         self.boardState = {
                             "A1": " ",
                             "B1": " ",
@@ -27,45 +29,65 @@ class TicTacToe:
                                     ".",
                                     ".",
                                     ".",
-                                    "."
+                                    "Waiting on another player . . ."
                                 ]
-        self.firstMove = None     # X or O
+        self.goesFirst = None     # X or O
         self.currentPlayer = None # X or O
         self.gameFinished = False # Is the game done?
-        self.stateChange = False  # Has message 
-        self.gameReady = False
-        self.startGame()
+        self.stateChange = False  # Has message or board change
+        self.gameReady = False    # Game maker has chosen letter and which letter goes first
+        self.serverReady = False  # Has the server started?
+        # self.startGame()          # Initial render and setup
 
-    def renderSetup(self):
-        # set x or o first
-        print("Do you want to be X or O?")
-        print("Letter: ",end="")
-        letter = input()
-        # let first player who started the game choose who goes first
-        print("Who goes first X or O?")
-        print("First: ", end="")
-        first = input()
+    def getGameState(self):
+        return {
+            "boardState": self.boardState,
+            "messageBoard": self.messageBoard,
+            "currentPlayer": self.currentPlayer,
+            "goesFirst": self.goesFirst,
+            "gameFinished": self.gameFinished,
+        }
+
+    def setGameState(self, newState):
+        self.boardState = newState["boardState"]
+        self.messageBoard = newState["messageBoard"]
+        self.currentPlayer = newState["currentPlayer"]
+        self.gameFinished = newState["gameFinished"]
+        self.goesFirst = newState["goesFirst"]
+
+    # def renderSetup(self):
+    #     # set x or o first
+    #     print("Do you want to be X or O?")
+    #     print("Letter: ",end="")
+    #     letter = input()
+    #     # let first player who started the game choose who goes first
+    #     print("Who goes first X or O?")
+    #     print("First: ", end="")
+    #     first = input()
     
-        self.firstMove = first
-        self.currentPlayer = letter
-        self.gameReady = True
+    #     self.goesFirst = first
+    #     self.currentPlayer = letter
+    #     self.gameReady = True
 
-        self.renderAll()
+    #     self.renderAll()
 
-    def startGame(self):
-        # Render initial view
-        self.renderAll()
+    # def startGame(self):
+    #     # Render initial view
+    #     self.renderAll()
 
-        # Start searching for state changes
-        self.runGame()
+    #     # Start searching for state changes
+    #     self.runGame()
 
-        if self.gameReady == True:
-            pass
-        # Start up Server - if game is set up
-            # tell message board server is starting
+    #     if self.gameReady == True:
+            
+    #         if self.serverReady == False:
+    #             pass
+    #             # gameServer = 
+    #     # Start up Server - if game is set up
+    #         # tell message board server is starting
 
-        # Wait for other player connection to server 
-            # tell user on message board
+    #     # Wait for other player connection to server 
+    #         # tell user on message board
 
     # NOT DONE - ADD CLEAR MSG COMMAND, ADD QUIT COMMAND
     def processMessages(self, message):
@@ -80,7 +102,7 @@ class TicTacToe:
 
         # Quit
         elif len(message.split()) == 1 and message.split()[0] == "quit":
-            pass
+            sys.exit(0)
 
         # Set
         elif message.split(None, 1)[0] == "set":
@@ -105,9 +127,9 @@ class TicTacToe:
 
         self.stateChange = True # Update view
 
-    def renderServerInfo(self):
-        print("Host: " + self.host)
-        print("Port: " + str(self.port))
+    # def renderServerInfo(self):
+    #     print("Host: " + self.host)
+    #     print("Port: " + str(self.port))
 
     def renderBoard(self, boardState):
         print("   A   B   C ")
@@ -132,16 +154,13 @@ class TicTacToe:
 
     def renderAll(self):
         clearScreen()
-        self.renderServerInfo()
-        print("")
+        # self.renderServerInfo()
+        # print("")
         self.renderBoard(self.boardState)
         print("")
 
-        if self.gameReady == False:
-            self.renderSetup()
-        else:
-            self.renderMessageBoard()
-            self.renderInputField()
+        self.renderMessageBoard()
+        # self.renderInputField()
 
     def setBoardLetter(self, position):
         self.boardState[position] = self.currentPlayer

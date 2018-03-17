@@ -1,6 +1,7 @@
 import sys
 import os
 import time
+import threading
 
 from TicTacToe import TicTacToe
 
@@ -26,7 +27,8 @@ class Menu:
     # Game begins here
     def startGame(self, ip, port):
         # Do I need to save the instance to a variable?
-        game = TicTacToe(ip, port)
+        gameThread = threading.Thread(target = TicTacToe(ip, port))
+        gameThread.start()
 
     # NOT DONE
     def showGetManualIP(self):
